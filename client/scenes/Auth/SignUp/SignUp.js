@@ -3,18 +3,18 @@ import gql from 'graphql-tag';
 
 import Form from '../common/Form';
 
-const SignIn = () => {
+const SignUp = () => {
     return (
         <div />
     );
 }
 
 const mutation = gql`
-    mutation signin($email: String, $password: String) {
-        login(email: $email, password: $password) {
+    mutation signup($email: String, $password: String) {
+        signup(email: $email, password: $password) {
             email
         }
     }
 `;
 
-export default Form('Sign In', mutation)(SignIn);
+export default Form('Sign Up', mutation)(SignUp);
