@@ -2,6 +2,8 @@ import React from 'react';
 import { hashHistory } from 'react-router';
 import { graphql } from 'react-apollo';
 
+import fetchUser from '../../queries/fetchUser';
+
 export default (name, mutation) => {
     return function (Component) {
         class Form extends React.Component {
@@ -25,33 +27,48 @@ export default (name, mutation) => {
                 const { email, password } = this.state;
                 e.preventDefault();
                 this.props.mutate({
-                    variables: { email, password }
+                    variables: this.state,
+                    refetchQueries: [{ query: fetchUser }]
                 }).then(() => hashHistory.push("/"));
+                console.log(this.props);
                 e.target.reset();
             }
 
             render() {
+                const { error } = this.props;
                 return (
-                    <div>
+                    <div className="container">
                         <Component {...this.props} />
-                        <h3>{name}</h3>
-                        <form onSubmit={this.onSubmit}>
-                            <input
-                                type="text"
-                                name="email"
-                                placeholder="email"
-                                value={this.state.email}
-                                onChange={this.onChange}
-                            />
-                            <input
-                                type="text"
-                                name="password"
-                                placeholder="password"
-                                value={this.state.password}
-                                onChange={this.onChange}
-                            />
-                            <button type="submit">log in</button>
-                        </form>
+                        <div className="row center">
+                            <h3>{name}</h3>
+                            <form
+                                className="offset-s2 col s8 m6 offset-m3"
+                                onSubmit={this.onSubmit}
+                            >
+                                {error && <div>{error.message}</div>}
+                                <div className="input-field">
+                                    <input
+                                        type="text"
+                                        name="email"
+                                        placeholder="email"
+                                        value={this.state.email}
+                                        onChange={this.onChange}
+                                    />
+                                </div>
+                                <div className="input-field">
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        placeholder="password"
+                                        value={this.state.password}
+                                        onChange={this.onChange}
+                                    />
+                                </div>
+                                <button type="submit" className="btn blue">
+                                    login
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 );
             }

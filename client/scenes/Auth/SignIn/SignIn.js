@@ -12,6 +12,7 @@ const SignIn = () => {
 const mutation = gql`
     mutation signin($email: String, $password: String) {
         login(email: $email, password: $password) {
+            id
             email
         }
     }
