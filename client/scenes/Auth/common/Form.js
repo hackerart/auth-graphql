@@ -2,7 +2,7 @@ import React from 'react';
 import { hashHistory } from 'react-router';
 import { graphql } from 'react-apollo';
 
-import fetchUser from '../../queries/fetchUser';
+import fetchUser from '../../../queries/fetchUser';
 
 export default (name, mutation) => {
     return function (Component) {
@@ -16,7 +16,11 @@ export default (name, mutation) => {
                 this.onChange = this.onChange.bind(this);
                 this.onSubmit = this.onSubmit.bind(this);
             }
-
+            componentWillUpdate(nextProps) {
+                if (nextProps.data && nextProps.data.user) {
+                    hashHistory.push('/dashboard');
+                }
+            }
             onChange(e) {
                 this.setState({
                     [e.target.getAttribute('name')]: e.target.value
@@ -29,8 +33,7 @@ export default (name, mutation) => {
                 this.props.mutate({
                     variables: this.state,
                     refetchQueries: [{ query: fetchUser }]
-                }).then(() => hashHistory.push("/"));
-                console.log(this.props);
+                });
                 e.target.reset();
             }
 
@@ -73,6 +76,6 @@ export default (name, mutation) => {
                 );
             }
         }
-        return graphql(mutation)(Form);
+        return graphql(fetchUser)(graphql(mutation)(Form));
     }
 }

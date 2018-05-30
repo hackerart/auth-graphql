@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 
-import fetchUser from '../queries/fetchUser';
+import fetchUser from '../../queries/fetchUser';
 
 const Header = ({ mutate, data: { user, loading, refetch }}) => {
     return (
